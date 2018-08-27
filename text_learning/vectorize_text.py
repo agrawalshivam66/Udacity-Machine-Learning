@@ -58,8 +58,6 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
             #print(pemail)
         
-
-            words = result.splitlines()
             word_data.append(result)
            
             if name=="sara":
@@ -75,7 +73,7 @@ print ("emails processed")
 from_sara.close()
 from_chris.close()
 
-pickle.dump(str(word_data), open("your_word_data.pkl", "wb") )
+pickle.dump(word_data, open("your_word_data.pkl", "wb") )
 pickle.dump( from_data, open("your_email_authors.pkl", "wb") )
 
 ### in Part 4, do TfIdf vectorization here
@@ -83,9 +81,9 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 #f2= open("your_word_data.pkl", "rb")
-vectorizer = TfidfVectorizer(stop_words = 'english')
-X = vectorizer.fit(word_data)
+vectorizer = TfidfVectorizer(stop_words = 'english',lowercase=True)
+X = vectorizer.fit_transform(word_data)
 terms = vectorizer.get_feature_names()
 print(len(terms))
-
+print(terms[34597])
 
