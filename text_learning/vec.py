@@ -83,7 +83,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 #f2= open("your_word_data.pkl", "rb")
-vectorizer = TfidfVectorizer(stop_words = 'english')
+vectorizer = TfidfVectorizer()
 X = vectorizer.fit(word_data)
 terms = vectorizer.get_feature_names()
 print(len(terms))
