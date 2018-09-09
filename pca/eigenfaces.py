@@ -81,6 +81,10 @@ X_train_pca = pca.transform(X_train)
 X_test_pca = pca.transform(X_test)
 print ("done in %0.3fs" % (time() - t0))
 
+# How much of the variance is explained by the first principal component? The second?
+print("variance is explained by the first principal component? The second? --",pca.explained_variance_ratio_[:2])
+
+
 ###############################################################################
 # Train a SVM classification model
 
@@ -143,3 +147,5 @@ eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
 plot_gallery(eigenfaces, eigenface_titles, h, w)
 
 pl.show()
+
+
