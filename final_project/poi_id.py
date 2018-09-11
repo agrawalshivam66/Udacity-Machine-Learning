@@ -58,11 +58,14 @@ features_train, features_test, labels_train, labels_test = cross_validation.trai
 #clf=tree.DecisionTreeClassifier()
 #clf.fit(features_train, labels_train)
 
-print(features_test, labels_test)
-
+#from sklearn import svm
 from sklearn.pipeline import Pipeline
 from sklearn.decomposition import PCA
 from sklearn.naive_bayes import GaussianNB
+#from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+#estimators = [('reduce_dim', PCA(n_components=4)),('decision_tree', tree.DecisionTreeClassifier())]
+#estimators = [('reduce_dim', PCA(n_components=4)),('adaboost', AdaBoostClassifier())]
+#estimators = [('reduce_dim', PCA(n_components=4)), ('svm', svm.SVC(kernel='rbf', C=10000.0))]
 estimators = [('reduce_dim', PCA(n_components=4)), ('nb', GaussianNB())]
 clf = Pipeline(estimators)
 clf.fit(features_train,labels_train)
