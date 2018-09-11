@@ -58,21 +58,17 @@ features_train, features_test, labels_train, labels_test = cross_validation.trai
 #clf=tree.DecisionTreeClassifier()
 #clf.fit(features_train, labels_train)
 
+print(features_test, labels_test)
 
-
-
-
-
-from sklearn.decomposition import RandomizedPCA
-pca = RandomizedPCA(n_components=4).fit(features_train)
-features_train= pca.transform(features_train)
-features_test = pca.transform(features_test)
-
+from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
 from sklearn.naive_bayes import GaussianNB
-clf = GaussianNB()
+estimators = [('reduce_dim', PCA(n_components=4)), ('nb', GaussianNB())]
+clf = Pipeline(estimators)
 clf.fit(features_train,labels_train)
 print(clf.score(features_test,labels_test))
 predictions = clf.predict(features_test)
+
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
