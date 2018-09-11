@@ -47,7 +47,7 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             pemail=parseOutText(email)
             ### use str.replace() to remove any instances of the words
             ### ["sara", "shackleton", "chris", "germani"]
-            stopwords = ["sara", "shackleton", "chris", "germani"]
+            stopwords = ["sara", "shackleton", "chris", "germani","sshacklensf","cgermannsf"]
             
             querywords = pemail.split()
             resultwords  = [word for word in querywords if word.lower() not in stopwords]

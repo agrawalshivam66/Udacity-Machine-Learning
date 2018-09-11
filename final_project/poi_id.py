@@ -10,13 +10,18 @@ from tester import dump_classifier_and_data
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','salary'] # You will need to use more features
+features_list = ['poi','salary', 'long_term_incentive', 'total_payments', 'exercised_stock_options', 'deferral_payments','bonus', 'shared_receipt_with_poi', 'total_stock_value', 'restricted_stock',  'director_fees', 'other'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
-with open("final_project_dataset.pkl", "r") as data_file:
+with open("final_project_dataset.pkl", "rb") as data_file:
     data_dict = pickle.load(data_file)
+data = featureFormat(data_dict, features_list)
 
 ### Task 2: Remove outliers
+#poping outliner
+data_dict.pop('TOTAL')
+
+
 ### Task 3: Create new feature(s)
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
@@ -24,6 +29,9 @@ my_dataset = data_dict
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = targetFeatureSplit(data)
+from sklearn import cross_validation
+features_train, features_test, labels_train, labels_test = cross_validation.train_test_split(features,labels, test_size=0.1, random_state=42)
+
 
 ### Task 4: Try a varity of classifiers
 ### Please name your classifier clf for easy export below.
@@ -32,8 +40,39 @@ labels, features = targetFeatureSplit(data)
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
+
+#from sklearn.grid_search import GridSearchCV
+#from sklearn import svm
+#from sklearn.svm import SVC
+#param_grid = {
+        # 'C': [1e3, 5e3, 1e4, 5e4, 1e5],
+         # 'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1],
+         # }
+# for sklearn version 0.16 or prior, the class_weight parameter value is 'auto'
+#clf = GridSearchCV(SVC(kernel='rbf', class_weight='balanced'), param_grid)
+
+#from sklearn.neighbors import KNeighborsClassifier
+#clf = KNeighborsClassifier(n_neighbors=2,weights="distance")
+
+#from sklearn import tree
+#clf=tree.DecisionTreeClassifier()
+#clf.fit(features_train, labels_train)
+
+
+
+
+
+
+from sklearn.decomposition import RandomizedPCA
+pca = RandomizedPCA(n_components=4).fit(features_train)
+features_train= pca.transform(features_train)
+features_test = pca.transform(features_test)
+
 from sklearn.naive_bayes import GaussianNB
 clf = GaussianNB()
+clf.fit(features_train,labels_train)
+print(clf.score(features_test,labels_test))
+predictions = clf.predict(features_test)
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -41,6 +80,16 @@ clf = GaussianNB()
 ### function. Because of the small size of the dataset, the script uses
 ### stratified shuffle split cross validation. For more info: 
 ### http://scikit-learn.org/stable/modules/generated/sklearn.cross_validation.StratifiedShuffleSplit.html
+
+
+
+from sklearn import metrics
+print ("precision:", metrics.precision_score(labels_test, predictions, average='macro'))
+print ("recall:", metrics.recall_score(labels_test, predictions, average='macro'))
+
+print ("predictions:", predictions)
+print ("actuals:", labels_test)
+
 
 # Example starting point. Try investigating other evaluation techniques!
 from sklearn.cross_validation import train_test_split
